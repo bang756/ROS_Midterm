@@ -1,0 +1,172 @@
+<?xml version="1.0" ?>
+<sdf version='1.10'>
+  <world name='warehouse_env'>
+    <gravity>0 0 -9.8100000000000005</gravity>
+    <physics name='1ms' type='ignored'>
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1</real_time_factor>
+      <real_time_update_rate>1000</real_time_update_rate>
+    </physics>
+
+    <!-- 기본 시스템 플러그인 -->
+    <plugin name='gz::sim::systems::Physics' filename='gz-sim-physics-system'/>
+    <plugin name='gz::sim::systems::UserCommands' filename='gz-sim-user-commands-system'/>
+    <plugin name='gz::sim::systems::SceneBroadcaster' filename='gz-sim-scene-broadcaster-system'/>
+    <plugin name='gz::sim::systems::Imu' filename='gz-sim-imu-system'/>
+    <plugin name='gz::sim::systems::Contact' filename='gz-sim-contact-system'/>
+    <plugin name='gz::sim::systems::Sensors' filename='gz-sim-sensors-system'>
+      <render_engine>ogre2</render_engine>
+    </plugin>
+
+    <magnetic_field>5.5644999999999998e-06 2.2875799999999999e-05 -4.2388400000000002e-05</magnetic_field>
+    <atmosphere type='adiabatic'/>
+
+    <scene>
+      <ambient>0.400000006 0.400000006 0.400000006 1</ambient>
+      <background>0.699999988 0.699999988 0.699999988 1</background>
+      <shadows>true</shadows>
+    </scene>
+
+    <!-- ground plane -->
+    <model name='ground_plane'>
+      <static>true</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>1 1</size>
+            </plane>
+          </geometry>
+          <surface>
+            <friction>
+              <ode/>
+            </friction>
+            <bounce/>
+            <contact/>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>100 100</size>
+            </plane>
+          </geometry>
+          <material>
+            <ambient>0.800000012 0.800000012 0.800000012 1</ambient>
+            <diffuse>0.800000012 0.800000012 0.800000012 1</diffuse>
+            <specular>0.800000012 0.800000012 0.800000012 1</specular>
+          </material>
+        </visual>
+        <pose>0 0 0 0 0 0</pose>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <pose>0 0 0 0 0 0</pose>
+      <self_collide>false</self_collide>
+    </model>
+
+    <!-- 창고 환경 -->
+    <include>
+      <uri>model://Warehouse</uri>
+      <name>warehouse_env</name>
+      <pose>0 0 0 0 0 0</pose>
+    </include>
+
+    <!-- 태양 조명 -->
+    <light name='sun' type='directional'>
+      <pose>0 0 10 0 0 0</pose>
+      <cast_shadows>true</cast_shadows>
+      <intensity>1</intensity>
+      <direction>-0.5 0.1 -0.9</direction>
+      <diffuse>0.8 0.8 0.8 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+      <attenuation>
+        <range>1000</range>
+        <linear>0.01</linear>
+        <constant>0.9</constant>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <spot>
+        <inner_angle>0</inner_angle>
+        <outer_angle>0</outer_angle>
+        <falloff>0</falloff>
+      </spot>
+    </light>
+
+    <!-- X4 -->
+    <include>
+      <uri>model://X4_GPS_RGBD</uri>
+      <name>X4_GPS_RGBD</name>
+      <!-- Start just inside the entrance (about one drone length in) on the floor -->
+      <pose>-1.8 -9.0 0 0 0 1.5708</pose>
+    </include>
+
+    <!-- turtlebot3_burger -->
+    <include>
+      <uri>model://turtlebot3_burger</uri>
+      <name>turtlebot3_burger</name>
+      <pose>0.2 -10.5 0 0 0 1.5708</pose>
+    </include>
+
+    <!-- 빈 선반 배열 (1.5배 크기: 4.8 x 1.8 x 3.75) -->
+    <!-- Row 1 (y = -6) -->
+    <include><uri>model://empty_shelf</uri><name>empty_shelf_row1_c</name><pose>0 -6 0 0 0 0</pose></include>
+
+    <!-- Row 2 (y = 0) -->
+    <include><uri>model://empty_shelf</uri><name>empty_shelf_row2_c</name><pose>0 0 0 0 0 0</pose></include>
+
+    <!-- Row 3 (y = 6) -->
+    <include><uri>model://empty_shelf</uri><name>empty_shelf_row3_c</name><pose>0 6 0 0 0 0</pose></include>
+
+    <!-- 선반 위 ArUco 마커: aruco_gazebo에서 가져온 플레이트 사용 (ID 3,4,5) -->
+    <!-- Row 1 (y = -6) -->
+    <include>
+      <uri>model://aruco_visual_marker_3</uri>
+      <name>aruco_marker3_front</name>
+      <pose>0 -5.09 2.025 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://aruco_visual_marker_3</uri>
+      <name>aruco_marker3_back</name>
+      <pose>0 -6.91 2.025 0 0 3.1416</pose>
+    </include>
+
+    <!-- Row 2 (y = 0) -->
+    <include>
+      <uri>model://aruco_visual_marker_4</uri>
+      <name>aruco_marker4_front</name>
+      <pose>0 0.91 2.025 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://aruco_visual_marker_4</uri>
+      <name>aruco_marker4_back</name>
+      <pose>0 -0.91 2.025 0 0 3.1416</pose>
+    </include>
+
+    <!-- Row 3 (y = 6) -->
+    <include>
+      <uri>model://aruco_visual_marker_5</uri>
+      <name>aruco_marker5_front</name>
+      <pose>0 6.91 2.025 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://aruco_visual_marker_5</uri>
+      <name>aruco_marker5_back</name>
+      <pose>0 5.09 2.025 0 0 3.1416</pose>
+    </include>
+
+  </world>
+</sdf>

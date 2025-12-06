@@ -1,0 +1,19 @@
+items:
+  토마토:
+    marker_id: 3
+    box_pose:
+      x: 5.2
+      y: -12.8
+      z: 0.0
+  바나나:
+    marker_id: 4
+    box_pose:
+      x: -3.0
+      y: 10.5
+      z: 0.0
+  사과:
+    marker_id: 5
+    box_pose:
+      x: 1.0
+      y: 3.0
+      z: 0.0

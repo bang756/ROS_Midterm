@@ -1,0 +1,37 @@
+<?xml version="1.0" ?>
+<sdf version="1.7">
+  <model name="aruco_visual_marker_3">
+    <static>true</static>
+    <link name="marker">
+      <pose>0 0 0 0 0 0</pose>
+      <collision name="collision">
+        <geometry>
+          <box>
+            <size>0.18 0.005 0.18</size>
+          </box>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <box>
+            <size>0.18 0.005 0.18</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>1 1 1 1</ambient>
+          <diffuse>1 1 1 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+          <double_sided>true</double_sided>
+          <pbr>
+            <metal>
+              <metalness>0.0</metalness>
+              <roughness>0.6</roughness>
+              <albedo_map>model://aruco_visual_marker_3/materials/textures/aruco_mark_3.png</albedo_map>
+            </metal>
+          </pbr>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

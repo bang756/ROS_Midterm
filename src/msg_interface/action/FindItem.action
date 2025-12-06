@@ -1,0 +1,9 @@
+# Goal
+string item_name
+---
+# Result
+bool success
+string message
+---
+# Feedback
+string state      # 진행률

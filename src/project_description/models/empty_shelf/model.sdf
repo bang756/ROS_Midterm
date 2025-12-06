@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<sdf version="1.10">
+  <model name="empty_shelf">
+    <static>true</static>
+    <pose>0 0 0 0 0 0</pose>
+    <!-- 창고형 선반: 기본 크기 1.5배 (길이 4.8m, 깊이 1.8m, 높이 3.75m) -->
+
+    <!-- 기둥 4개 -->
+    <link name="post_fl">
+      <pose>2.4 0.9 1.875 0 0 0</pose>
+      <visual name="vis">
+        <geometry><box><size>0.15 0.15 3.75</size></box></geometry>
+        <material><ambient>0.25 0.25 0.25 1</ambient><diffuse>0.35 0.35 0.35 1</diffuse></material>
+      </visual>
+      <collision name="col"><geometry><box><size>0.15 0.15 3.75</size></box></geometry></collision>
+    </link>
+    <link name="post_fr">
+      <pose>2.4 -0.9 1.875 0 0 0</pose>
+      <visual name="vis">
+        <geometry><box><size>0.15 0.15 3.75</size></box></geometry>
+        <material><ambient>0.25 0.25 0.25 1</ambient><diffuse>0.35 0.35 0.35 1</diffuse></material>
+      </visual>
+      <collision name="col"><geometry><box><size>0.15 0.15 3.75</size></box></geometry></collision>
+    </link>
+    <link name="post_rl">
+      <pose>-2.4 0.9 1.875 0 0 0</pose>
+      <visual name="vis">
+        <geometry><box><size>0.15 0.15 3.75</size></box></geometry>
+        <material><ambient>0.25 0.25 0.25 1</ambient><diffuse>0.35 0.35 0.35 1</diffuse></material>
+      </visual>
+      <collision name="col"><geometry><box><size>0.15 0.15 3.75</size></box></geometry></collision>
+    </link>
+    <link name="post_rr">
+      <pose>-2.4 -0.9 1.875 0 0 0</pose>
+      <visual name="vis">
+        <geometry><box><size>0.15 0.15 3.75</size></box></geometry>
+        <material><ambient>0.25 0.25 0.25 1</ambient><diffuse>0.35 0.35 0.35 1</diffuse></material>
+      </visual>
+      <collision name="col"><geometry><box><size>0.15 0.15 3.75</size></box></geometry></collision>
+    </link>
+
+    <!-- 선반 판 3개 (두께 0.18m) -->
+    <link name="shelf_bottom">
+      <pose>0 0 0.27 0 0 0</pose>
+      <visual name="vis">
+        <geometry><box><size>4.8 1.8 0.18</size></box></geometry>
+        <material><ambient>0.45 0.45 0.45 1</ambient><diffuse>0.6 0.6 0.6 1</diffuse></material>
+      </visual>
+      <collision name="col"><geometry><box><size>4.8 1.8 0.18</size></box></geometry></collision>
+    </link>
+    <link name="shelf_mid">
+      <pose>0 0 2.025 0 0 0</pose>
+      <visual name="vis">
+        <geometry><box><size>4.8 1.8 0.18</size></box></geometry>
+        <material><ambient>0.45 0.45 0.45 1</ambient><diffuse>0.6 0.6 0.6 1</diffuse></material>
+      </visual>
+      <collision name="col"><geometry><box><size>4.8 1.8 0.18</size></box></geometry></collision>
+    </link>
+    <link name="shelf_top">
+      <pose>0 0 3.15 0 0 0</pose>
+      <visual name="vis">
+        <geometry><box><size>4.8 1.8 0.18</size></box></geometry>
+        <material><ambient>0.45 0.45 0.45 1</ambient><diffuse>0.6 0.6 0.6 1</diffuse></material>
+      </visual>
+      <collision name="col"><geometry><box><size>4.8 1.8 0.18</size></box></geometry></collision>
+    </link>
+
+  </model>
+</sdf>
