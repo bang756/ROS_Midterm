@@ -1,15 +1,14 @@
 # warehouse_drone_forklift_sim
 
- Gazebo 창고 환경에서 드론(X4_GPS_RGBD)과 터틀봇3 burger(지게차 역할)를 이용해 **물품 탐색 → 위치 전달 → 지게차 이동**까지 하나의 파이프라인으로 시뮬레이션하는 ROS2 Humble 프로젝트입니다.
-Ubuntu 22.04 / WSL2 Ubuntu 22.04에서 이 README만 보고 따라 하면, **환경 설치 → ROS2 설치 → 워크스페이스 준비 → 프로젝트 빌드/실행**까지 진행할 수 있도록 구성했습니다.
+- Gazebo 창고 환경에서 드론(X4_GPS_RGBD)과 터틀봇3 burger(지게차 역할)를 이용해 **물품 탐색 → 위치 전달 → 지게차 이동**까지 하나의 파이프라인으로 시뮬레이션하는 ROS2 Humble 프로젝트입니다.
+- Ubuntu 22.04 / WSL2 Ubuntu 22.04
+- Gazebo Harmonic
 
 ROS2 Humble은 Ubuntu 22.04에서 공식 지원되는 LTS 버전이고, Python 3.10은 해당 OS와 기본적으로 호환되며 `rclpy` 기반 Python 노드 개발에 적합합니다. 팀 전체가 동일한 버전을 사용해야 디버깅·협업 시 혼선을 줄일 수 있으므로, 이 조합을 전제로 합니다.
 
 ---
 
 ## 1. 프로젝트 개요
-
-- **프로젝트 이름(임시)**: `warehouse_drone_forklift_sim`
 - **한 줄 설명**:
 Gazebo 창고에서 드론과 지게차(터틀봇3)를 연동해, ArUco 마커 기반으로 물품을 탐색하고 해당 선반 앞으로 지게차를 이동시키는 ROS2 Humble 시뮬레이션 프로젝트.
 - **시스템 동작 개요**
