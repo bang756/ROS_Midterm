@@ -1,10 +1,6 @@
 # warehouse_drone_forklift_sim
 
 - Gazebo 창고 환경에서 드론(X4_GPS_RGBD)과 터틀봇3 burger(지게차 역할)를 이용해 **물품 탐색 → 위치 전달 → 지게차 이동**까지 하나의 파이프라인으로 시뮬레이션하는 ROS2 Humble 프로젝트입니다.
-- Ubuntu 22.04 / WSL2 Ubuntu 22.04
-- Gazebo Harmonic
-
-ROS2 Humble은 Ubuntu 22.04에서 공식 지원되는 LTS 버전이고, Python 3.10은 해당 OS와 기본적으로 호환되며 `rclpy` 기반 Python 노드 개발에 적합합니다. 팀 전체가 동일한 버전을 사용해야 디버깅·협업 시 혼선을 줄일 수 있으므로, 이 조합을 전제로 합니다.
 
 ---
 
@@ -14,8 +10,8 @@ Gazebo 창고에서 드론과 지게차(터틀봇3)를 연동해, ArUco 마커 �
 - **시스템 동작 개요**
     - Gazebo 월드(`warehouse_env.sdf`) 안에 선반(`empty_shelf` 3열)과 아르코 마커(ID 3/4/5)가 배치되어 있습니다.
     - 드론(X4_GPS_RGBD)이 선반 앞을 일정 고도로 순찰하며 카메라로 ArUco 마커를 검출합니다.
-    - 아이템 DB(`item_db.yaml`)에서 “토마토/바나나/사과” → ArUco ID → 선반 위치(box_pose)를 매핑합니다.
-    - 드론 순찰 노드는 `/find_item` 액션으로 특정 품목을 요청받으면, 해당 마커를 찾도록 드론을 이륙·순찰시키고 검출을 시도합니다.
+    - 아이템 DB(`item_db.yaml`)에서 “토마토/바나나/사과” → ArUco ID를 매핑합니다.
+    - 드론 순찰 노드는 `/find_item` 액션으로 특정 품목을 요청받으면, 드론을 이륙시키고 해당 마커를 찾도록 순찰하며 검출을 시도합니다.
     - ArUco 검출 노드(`ros2_aruco/aruco_node`)는 `/aruco_markers`, `/aruco_poses`를 퍼블리시합니다.
     - 브릿지 노드는 검출된 마커 ID(3/4/5)를 지게차 목적지 ID(1/2/3)로 매핑하고, `/goto_id` 액션을 호출합니다.
     - 터틀봇3 지게차 노드는 `/cmd_vel`을 퍼블리시하며 지정된 선반 앞까지 이동합니다.
@@ -57,37 +53,15 @@ Gazebo 창고에서 드론과 지게차(터틀봇3)를 연동해, ArUco 마커 �
 
 ## 2. 사전 요구사항 (Prerequisites)
 
-### 2.1 지원 OS
-
-- **권장**
+- **사용환경**
     - Ubuntu 22.04 LTS (Native 설치)
     - Windows 11 + WSL2 + Ubuntu 22.04
+    - ROS2 Humble
+    - Gazebo Harmonic
 
-## 3. Python 3.10 설치 (Ubuntu 22.04 기준)
+## Python 3.10 설치 (Ubuntu 22.04 기준)
 
-Ubuntu 22.04에는 기본적으로 Python 3.10이 포함되어 있지만, 환경에 따라 명시적으로 설치가 필요할 수 있습니다. 아래 순서를 그대로 따라 하십시오.
-
-## 4. ROS2 Humble 설치
-
-```
-sudo apt update && sudo apt install locales
-sudo locale-gen en_US en_US.UTF-8
-sudo update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
-export LANG=en_US.UTF-8
-
-sudo apt install software-properties-common
-sudo add-apt-repository universe
-
-sudo apt update && sudo apt install curl -y
-sudo curl -sSL <https://raw.githubusercontent.com/ros/rosdistro/master/ros.key> -o /usr/share/keyrings/ros-archive-keyring.gpg
-
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] <http://packages.ros.org/ros2/ubuntu> $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
-
-sudo apt update && sudo apt install ros-humble-desktop
-
-```
-
----
+Ubuntu 22.04에는 기본적으로 Python 3.10이 포함되어 있지만, 환경에 따라 명시적으로 설치가 필요할 수 있습니다.
 
 ---
 
@@ -174,11 +148,8 @@ ros2 action send_goal --feedback /find_item \
 
 ### 6.1 참고 자료
 
-- ROS2 Humble 공식 문서
-    - 설치 가이드:
-        - https://docs.ros.org/en/humble/Installation.html
-    - 튜토리얼(초보자용):
-        - https://docs.ros.org/en/humble/Tutorials.html
+- Turtlebot3 매뉴얼
+    - https://emanual.robotis.com/docs/en/platform/turtlebot3/overview/
 - Gazebo 내 ArUco 마커 사용법 참조
     - https://github.com/SaxionMechatronics/ros2-gazebo-aruco.git
 
