@@ -1,6 +1,6 @@
 # warehouse_drone_forklift_sim
 
-- Gazebo 창고 환경에서 드론(X4_GPS_RGBD)과 터틀봇3 burger(지게차 역할)를 이용해 **물품 탐색 → 위치 전달 → 지게차 이동**까지 하나의 파이프라인으로 시뮬레이션하는 ROS2 Humble 프로젝트입니다.
+- Gazebo 창고 환경에서 드론(X4_GPS_RGBD)과 터틀봇3 burger(지게차 역할)를 이용해 **물품 탐색 → ID 전달 → 지게차 이동**까지 하나의 파이프라인으로 시뮬레이션하는 ROS2 Humble 프로젝트입니다.
 
 ---
 
@@ -143,10 +143,66 @@ ros2 action send_goal --feedback /find_item \
 4. 터틀봇3 지게차가 `/cmd_vel`을 퍼블리시하며 해당 선반 앞으로 이동합니다.
 
 ---
+## 6.  추후 활용
 
-## 6.  참고 자료
+현재 프로젝트는 "찾을 물건 이름 입력 → 드론 순회 → ArUco 검출 → ID 매핑 → 지게차 waypoint(하드코딩 경로) 이동"까지의 파이프라인을 검증하는 구조입니다.
 
-### 6.1 참고 자료
+아래 확장은 추후 구현하려 했던 방법들입니다.
+
+### 6.1 SLAM + Nav2로 확장 (ArUco Pose를 Nav2 Goal로 사용)
+
+지금은 지게차가 /goto_id 액션에서 ID별 사전 정의 경로로 움직입니다.
+추후에는 TurtleBot이 SLAM으로 맵을 만들고 Nav2를 붙이면, ArUco 검출 노드가 퍼블리시하는 /aruco_poses를 목적지(goal)로 변환해서 “진짜 위치 기반 자율주행”으로 확장할 수 있습니다.
+
+- **핵심 아이디어**
+    - 드론 카메라에서 나온 /aruco_poses는 기본적으로 카메라 좌표계 기준입니다.
+    - Nav2 goal은 보통 map 프레임의 geometry_msgs/PoseStamped가 필요합니다.
+
+- **구현 방향(개념)**
+    - SLAM 실행해서 map 프레임 생성
+    - Nav2 실행 (nav2_bringup)
+    - aruco_to_forklift_node를 확장/교체해서: /aruco_poses 구독
+    - tf2로 camera_frame -> map 변환
+    - 변환된 pose를 Nav2 goal로 전송
+
+이렇게 하면 “ID→고정 경로”가 아니라, 실제 검출된 마커 위치 기반으로 지게차가 자율주행하게 됩니다.
+
+### 6.2 현재 waypoint 이동 로직 그대로 활용해서 “복귀 + 재탐색” 루프 만들기
+
+현재 지게차는 /goto_id로 선반 앞까지 이동할 수 있습니다.
+
+여기서 코드를 크게 바꾸지 않고도, 다음을 추가하면 “새 물품을 다시 찾으러 가는 반복 시나리오”가 가능합니다.
+
+- **목표**
+    - 지게차가 목표 선반 앞 도착 → 처음 시작 위치(Home)로 복귀
+    - 다음에 “바나나” 같은 새로운 품목 요청이 오면 → 다시 이동
+
+기존 /goto_id의 waypoint(스텝 경로)를 그대로 두고, 이동 후 대기(10초) 이후 기존 경로를 역순으로 실행해서 복귀하도록 만들 수 있습니다.
+
+- **최종 동작 흐름**
+    - /find_item으로 “토마토” 요청
+    - 드론이 토마토 마커 검출 → 지게차 /goto_id(id=1) 이동
+    - 5~10초 대기 후 기존 경로를 역순으로 실행해서 복귀
+    - 이후 /find_item으로 “바나나” 요청 시
+    - 같은 방식으로 드론 탐색/검출 → 지게차가 다시 이동
+
+ 이렇게 하면 요청이 들어올 때마다 반복 수행 가능한 물류 데모로 확장할 수 있습니다.
+
+
+### 6.3 확장 시 체크포인트
+
+1. Nav2 goal로 쓰려면 /aruco_poses가 map 프레임으로 변환되어야 합니다. (TF 변환이 핵심)
+
+2. 복귀 루프를 만들려면 기존 경로를 역순으로 실행해서 복귀시키는 코드를 추가하는 게 가장 단순합니다.
+
+3. 지게차가 이동 중  /find_item으로 요청이 들어와도 home이 아니면 이동하지 않게, 중복 방지 코드를 추가해 줘야 합니다.
+
+
+---
+
+## 7.  참고 자료
+
+### 7.1 참고 자료
 
 - Turtlebot3 매뉴얼
     - https://emanual.robotis.com/docs/en/platform/turtlebot3/overview/
@@ -154,3 +210,4 @@ ros2 action send_goal --feedback /find_item \
     - https://github.com/SaxionMechatronics/ros2-gazebo-aruco.git
 
 ---
+
