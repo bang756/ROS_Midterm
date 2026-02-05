@@ -197,11 +197,7 @@ ros2 action send_goal --feedback /find_item \
 
 3. 지게차가 이동 중  /find_item으로 요청이 들어와도 home이 아니면 이동하지 않게, 중복 방지 코드를 추가해 줘야 합니다.
 
-
 ---
-
-Uploading 로봇운영체제실습.MP4…
-
 
 ## 7.  참고 자료
 
