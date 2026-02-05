@@ -209,4 +209,6 @@ ros2 action send_goal --feedback /find_item \
     - https://github.com/SaxionMechatronics/ros2-gazebo-aruco.git
 
 ---
+## 8. 시연 영상
+[![Video Label](https://youtu.be/fuVx-DQAfmw.jpg)](https://youtu.be/fuVx-DQAfmw)
 
