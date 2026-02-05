@@ -210,5 +210,4 @@ ros2 action send_goal --feedback /find_item \
 
 ---
 ## 8. 시연 영상
-[![Video Label](https://img.youtu.be/fuVx-DQAfmw/0.jpg)](https://youtu.be/fuVx-DQAfmw)
-
+[![Video Label](https://img.youtube.com/vi/fuVx-DQAfmw/0.jpg)](https://youtu.be/fuVx-DQAfmw)
