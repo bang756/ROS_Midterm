@@ -200,6 +200,9 @@ ros2 action send_goal --feedback /find_item \
 
 ---
 
+Uploading 로봇운영체제실습.MP4…
+
+
 ## 7.  참고 자료
 
 ### 7.1 참고 자료
